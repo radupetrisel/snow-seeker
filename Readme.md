@@ -9,3 +9,5 @@ As usual, at the end of the guided tutorial there will be some challenges for me
 **Challenge #1**: Add a photo credit over the ResortView image. The data is already loaded from the JSON for this purpose, so you just need to make it look good in the UI.
 
 **Challenge #2**: Fill in the loading and saving methods for Favorites
+
+**Challenge #3**: For a real challenge, let the user sort the resorts in ContentView either using the default order, alphabetical order, or country order.

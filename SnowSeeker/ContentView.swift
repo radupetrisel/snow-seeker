@@ -13,10 +13,13 @@ struct ContentView: View {
     @StateObject private var favorites = Favorites()
     @State private var searchText = ""
     
+    @State private var isShowingSortOptionsDialog = false
+    @State private var sorting = SortOptions.none
+    
     var body: some View {
         NavigationView {
             List {
-                ForEach(filteredResorts) { resort in
+                ForEach(sortedResorts) { resort in
                     NavigationLink {
                         ResortView(resort: resort)
                     } label: {
@@ -51,6 +54,17 @@ struct ContentView: View {
             }
             .navigationTitle("Resorts")
             .searchable(text: $searchText, prompt: "Search for a resort")
+            .toolbar {
+                Button("Sort") {
+                    isShowingSortOptionsDialog = true
+                }
+            }
+            .confirmationDialog("Choose sorting", isPresented: $isShowingSortOptionsDialog) {
+                Button("Clear sorting") { sorting = .none }
+                Button("By name") { sorting = .name }
+                Button("By country") { sorting = .country }
+                Button("Cancel", role: .cancel) { }
+            }
             
             WelcomeView()
         }
@@ -63,6 +77,21 @@ struct ContentView: View {
         }
         
         return resorts.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
+    }
+    
+    private var sortedResorts: [Resort] {
+        switch sorting {
+        case .none:
+            return filteredResorts
+        case .name:
+            return filteredResorts.sorted { $0.name < $1.name }
+        case .country:
+            return filteredResorts.sorted { $0.country < $1.country }
+        }
+    }
+    
+    private enum SortOptions {
+        case none, name, country
     }
 }
 
